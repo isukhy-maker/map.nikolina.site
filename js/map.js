@@ -1,11 +1,14 @@
 /**
  * Инициализация Leaflet в режиме `CRS.Simple`.
  *
- * Подложка — растровая условная схема поселка 1123 × 793. Границы карты задаются
- * как `[[0, 0], [793, 1123]]`; точка контракта `[x, y]` переводится в `[793 - y, x]`.
+ * Подложка — условная схема поселка 1123 × 793 (растр PNG или вектор SVG).
+ * Само изображение берётся из каталога `data/plans.json` (см. `plans.js`),
+ * поэтому замена подложки не требует правки кода. Границы карты задаются как
+ * `[[0, 0], [793, 1123]]`; точка контракта `[x, y]` переводится в `[793 - y, x]`.
  */
 
 import { MAP_HEIGHT, MAP_WIDTH, planBounds } from './contract.js'
+import { planBoundsLatLng, planImageUrl } from './plans.js'
 
 export function createMap(container, contract) {
   if (!window.L) {
@@ -36,17 +39,6 @@ export function createMap(container, contract) {
   // слева сверху: справа сверху открывается карточка дачи и перекрыла бы кнопки
   window.L.control.zoom({ position: 'topleft' }).addTo(map)
 
-  const plans = Array.isArray(contract.plans) ? contract.plans : []
-  const plan = plans.find((item) => item.id === contract.defaultPlanId) || plans[0] || null
-
-  if (plan && plan.imageUrl) {
-    window.L.imageOverlay(plan.imageUrl, bounds, {
-      className: 'ng-plan-image',
-      interactive: false,
-      alt: plan.title || 'Условная схема поселка',
-    }).addTo(map)
-  }
-
   // Внутри страницы /map колесо должно прокручивать страницу, а не зумить карту:
   // зум колесом включается кликом по карте и выключается, когда курсор ушёл.
   if (document.documentElement.classList.contains('is-embedded')) {
@@ -62,5 +54,33 @@ export function createMap(container, contract) {
   }
   window.addEventListener('resize', () => map.invalidateSize())
 
-  return { map, bounds, plan }
+  return { map, bounds, basemap: null, basemapPlan: null }
+}
+
+/**
+ * Поставить подложку из каталога. Старое изображение снимается.
+ * Работает и с PNG/JPEG, и с SVG: Leaflet кладёт изображение в `<img>`,
+ * браузер сам масштабирует вектор под размеры схемы.
+ */
+export function setBasemap(mapApi, plan) {
+  if (!mapApi) return null
+
+  if (mapApi.basemap) {
+    mapApi.map.removeLayer(mapApi.basemap)
+    mapApi.basemap = null
+  }
+  mapApi.basemapPlan = plan || null
+
+  const url = planImageUrl(plan)
+  if (!url) return null
+
+  const overlay = window.L.imageOverlay(url, planBoundsLatLng(plan), {
+    className: 'ng-plan-image' + (plan.format === 'svg' ? ' is-vector' : ''),
+    interactive: false,
+    alt: plan.title || 'Условная схема поселка',
+  })
+
+  overlay.addTo(mapApi.map)
+  mapApi.basemap = overlay
+  return overlay
 }

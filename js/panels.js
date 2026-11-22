@@ -14,7 +14,7 @@ const LAYER_DEFS = [
   { id: 'lost', label: 'Утраченные здания', hint: 'Сведения об утраченных зданиях уточняются.' },
 ]
 
-export function renderLayers(container, layers, onChange) {
+export function renderLayers(container, layers, onChange, extra) {
   container.innerHTML = ''
   for (const def of LAYER_DEFS) {
     const label = document.createElement('label')
@@ -27,6 +27,21 @@ export function renderLayers(container, layers, onChange) {
       layers[def.id] = input.checked
       onChange()
     })
+
+    label.appendChild(input)
+    label.appendChild(document.createTextNode(def.label))
+    container.appendChild(label)
+  }
+
+  // дополнительные слои, которые описывает каталог подложек (например, GeoJSON)
+  for (const def of extra || []) {
+    const label = document.createElement('label')
+    label.className = 'ng-check'
+
+    const input = document.createElement('input')
+    input.type = 'checkbox'
+    input.checked = !!def.checked
+    input.addEventListener('change', () => def.onChange(input.checked))
 
     label.appendChild(input)
     label.appendChild(document.createTextNode(def.label))
@@ -99,6 +114,59 @@ export function renderLegend(container) {
       return '<li>' + swatch + '<span>' + escapeHtml(item.text) + '</span></li>'
     })
     .join('')
+}
+
+export function renderBasemaps(container, plans, activeId, onSelect) {
+  container.innerHTML = ''
+
+  const usable = (plans || []).filter((plan) => plan.status === 'active')
+  const archived = (plans || []).filter((plan) => plan.status === 'archive')
+
+  for (const plan of usable) {
+    const button = document.createElement('button')
+    button.type = 'button'
+    button.className = 'ng-basemap' + (plan.id === activeId ? ' is-active' : '')
+
+    const title = document.createElement('strong')
+    title.textContent = plan.title || plan.id
+    button.appendChild(title)
+
+    const meta = document.createElement('span')
+    meta.textContent = [plan.year, plan.format ? String(plan.format).toUpperCase() : '']
+      .filter(Boolean)
+      .join(' · ')
+    if (meta.textContent) button.appendChild(meta)
+
+    button.addEventListener('click', () => onSelect(plan.id))
+    container.appendChild(button)
+  }
+
+  if (!archived.length) return
+
+  const block = document.createElement('div')
+  block.className = 'ng-basemap-archive'
+
+  const heading = document.createElement('h3')
+  heading.textContent = 'Архивные оригиналы'
+  block.appendChild(heading)
+
+  const hint = document.createElement('p')
+  hint.className = 'ng-hint'
+  hint.textContent =
+    'Хранятся для сверки и не подставляются как подложка, пока не откалиброваны по опорным точкам.'
+  block.appendChild(hint)
+
+  for (const plan of archived) {
+    const link = document.createElement('a')
+    link.className = 'ng-basemap-original'
+    link.href = plan.image
+    link.target = '_blank'
+    link.rel = 'noopener'
+    link.textContent = plan.title + (plan.width ? ' · ' + plan.width + '×' + plan.height : '')
+    block.appendChild(link)
+  }
+
+  container.appendChild(block)
 }
 
 export function renderSearchResults(container, houses, onPick) {

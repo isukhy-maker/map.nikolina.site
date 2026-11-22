@@ -383,6 +383,82 @@ body {
   image-rendering: auto;
 }
 
+/* SVG-подложка: браузер масштабирует вектор сам, без «мыла» растра */
+.ng-plan-image.is-vector {
+  image-rendering: auto;
+}
+
+/* ---------------- подложки ---------------- */
+
+.ng-basemaps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.ng-basemap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--line);
+  background: var(--ivory);
+  border-radius: 0.5rem;
+  padding: 0.35rem 0.55rem;
+  font-family: inherit;
+  font-size: 0.8rem;
+  color: var(--graphite);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.ng-basemap:hover {
+  border-color: var(--ng-pine);
+}
+
+.ng-basemap.is-active {
+  border-color: var(--ng-pine);
+  background: #eef3ef;
+}
+
+.ng-basemap strong {
+  font-weight: 600;
+}
+
+.ng-basemap span {
+  font-size: 0.7rem;
+  color: var(--graphite-soft);
+}
+
+.ng-basemap-archive {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--line);
+}
+
+.ng-basemap-archive h3 {
+  margin: 0 0 0.3rem;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--graphite-soft);
+}
+
+.ng-basemap-original {
+  display: block;
+  font-size: 0.74rem;
+  line-height: 1.35;
+  color: var(--ng-pine);
+  text-decoration: none;
+  padding: 0.15rem 0;
+}
+
+.ng-basemap-original:hover {
+  text-decoration: underline;
+}
+
 /* подписи участков */
 .ng-plot-label {
   background: transparent;

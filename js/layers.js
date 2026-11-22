@@ -13,6 +13,7 @@ import {
   polygonCentroid,
   toLatLng,
 } from './contract.js'
+import { APP_BASE } from './plans.js'
 
 const COLORS = {
   plotStroke: '#508b79',
@@ -177,7 +178,74 @@ export function createLayers(map, contract, handlers) {
     if (!visible && map.hasLayer(group)) map.removeLayer(group)
   }
 
+  /* ---------------- дополнительные векторные слои GeoJSON ---------------- */
+
+  // Слои описываются в каталоге подложек (`data/plans.json` → `plans[].layers`)
+  // и лежат отдельными файлами `.geojson` — код при их замене не меняется.
+  const geoLayers = new Map()
+
+  function geoStyle(config) {
+    return {
+      color: config.color || COLORS.plotStroke,
+      weight: config.weight != null ? Number(config.weight) : 1,
+      opacity: 0.9,
+      fillColor: config.fillColor || config.color || COLORS.plotFill,
+      fillOpacity: config.fillOpacity != null ? Number(config.fillOpacity) : 0.12,
+    }
+  }
+
+  async function loadGeoJsonData(config) {
+    // Слой может лежать отдельным файлом `.geojson` (поле `url`) или
+    // ES-модулем с тем же GeoJSON внутри (поле `module`).
+    if (config.module) {
+      const module = await import(new URL(config.module, APP_BASE).href)
+      return (module && (module.featureCollection || module.default)) || null
+    }
+    if (!config.url) return null
+    const response = await fetch(new URL(config.url, APP_BASE).href, { cache: 'no-cache' })
+    if (!response.ok) throw new Error('HTTP ' + response.status)
+    return await response.json()
+  }
+
+  async function loadGeoJsonLayers(configs) {
+    for (const layer of geoLayers.values()) {
+      if (layer && map.hasLayer(layer)) map.removeLayer(layer)
+    }
+    geoLayers.clear()
+
+    for (const config of configs || []) {
+      if (!config || config.type !== 'geojson') continue
+      try {
+        const data = await loadGeoJsonData(config)
+        if (!data) throw new Error('нет данных слоя')
+        geoLayers.set(
+          config.id,
+          window.L.geoJSON(data, {
+            style: () => geoStyle(config),
+            interactive: false,
+          }),
+        )
+      } catch (error) {
+        geoLayers.set(config.id, null)
+        if (window.console) console.warn('GeoJSON-слой «' + config.id + '» не загрузился:', error)
+      }
+    }
+
+    return geoLayers
+  }
+
+  function applyGeoJson(state) {
+    const visible = state.geoJson || {}
+    geoLayers.forEach((layer, id) => {
+      if (!layer) return
+      const show = !!visible[id]
+      if (show && !map.hasLayer(layer)) layer.addTo(map)
+      if (!show && map.hasLayer(layer)) map.removeLayer(layer)
+    })
+  }
+
   function apply(state) {
+    applyGeoJson(state)
     toggle(groups.land, state.layers.land)
     toggle(groups.labels, state.layers.land)
     toggle(groups.links, state.layers.land)
@@ -241,5 +309,16 @@ export function createLayers(map, contract, handlers) {
     map.fitBounds(planBounds())
   }
 
-  return { apply, focusHouse, focusPlot, resetView, plotById, houseById, familyTypeLabels: FAMILY_TYPE_LABELS, formatPeriod }
+  return {
+    apply,
+    focusHouse,
+    focusPlot,
+    resetView,
+    plotById,
+    houseById,
+    familyTypeLabels: FAMILY_TYPE_LABELS,
+    formatPeriod,
+    loadGeoJsonLayers,
+    geoLayerCount: () => geoLayers.size,
+  }
 }

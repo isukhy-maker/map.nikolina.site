@@ -6,10 +6,12 @@
  */
 
 import { resolveData, postToParent, isEmbedded } from './data.js'
-import { createMap } from './map.js'
+import { createMap, setBasemap } from './map.js'
 import { createLayers } from './layers.js'
+import { findPlan, loadPlansCatalog } from './plans.js'
 import { renderHouseCard, renderPlotCard } from './card.js'
 import {
+  renderBasemaps,
   renderFamilies,
   renderLayers,
   renderLegend,
@@ -20,6 +22,8 @@ import {
 
 const state = {
   layers: { houses: true, land: true, events: true, families: false, historical: false, lost: false },
+  planId: '',
+  geoJson: {},
   periodId: 'all',
   familyId: '',
   query: '',
@@ -30,6 +34,8 @@ const state = {
 
 let contract = null
 let layersApi = null
+let mapApi = null
+let catalog = null
 
 const elements = {
   status: document.getElementById('status'),
@@ -38,6 +44,7 @@ const elements = {
   results: document.getElementById('search-results'),
   layers: document.getElementById('layers'),
   layersHint: document.getElementById('layers-hint'),
+  basemaps: document.getElementById('basemaps'),
   periods: document.getElementById('periods'),
   family: document.getElementById('family'),
   familyHint: document.getElementById('family-hint'),
@@ -182,12 +189,52 @@ function selectPlot(plot) {
 /* Панели                                                              */
 /* ------------------------------------------------------------------ */
 
+function currentPlan() {
+  return findPlan(catalog, state.planId) || (catalog && catalog.plans ? catalog.plans[0] : null)
+}
+
+function geoChecks() {
+  const plan = currentPlan()
+  const layers = (plan && plan.layers) || []
+  return layers.map((layer) => ({
+    label: layer.title || layer.id,
+    checked: !!state.geoJson[layer.id],
+    onChange: (checked) => {
+      state.geoJson[layer.id] = checked
+      render()
+    },
+  }))
+}
+
+async function applyPlan(planId) {
+  const plan = findPlan(catalog, planId) || (catalog && catalog.plans ? catalog.plans[0] : null)
+  if (!plan) return
+
+  state.planId = plan.id
+  setBasemap(mapApi, plan)
+
+  state.geoJson = {}
+  for (const layer of plan.layers || []) state.geoJson[layer.id] = layer.default === true
+  if (layersApi) await layersApi.loadGeoJsonLayers(plan.layers || [])
+
+  render()
+}
+
 function renderPanels() {
-  renderLayers(elements.layers, state.layers, () => {
-    updateLayersHint(elements.layersHint, state.layers)
-    render()
-  })
+  renderLayers(
+    elements.layers,
+    state.layers,
+    () => {
+      updateLayersHint(elements.layersHint, state.layers)
+      render()
+    },
+    geoChecks(),
+  )
   updateLayersHint(elements.layersHint, state.layers)
+
+  renderBasemaps(elements.basemaps, (catalog && catalog.plans) || [], state.planId, (planId) => {
+    applyPlan(planId).then(() => renderPanels())
+  })
 
   renderPeriods(elements.periods, contract.periods || [], state.periodId, (periodId) => {
     state.periodId = periodId
@@ -261,6 +308,7 @@ function readUrlOptions() {
   return {
     houseId: params.get('house') || '',
     related: params.get('related') === '1',
+    planId: params.get('plan') || '',
     apiUrl: params.get('api') || '',
   }
 }
@@ -288,11 +336,15 @@ async function boot() {
     const houseId = options.houseId || urlOptions.houseId
     const related = options.related != null ? !!options.related : urlOptions.related
 
-    const mapApi = createMap(document.getElementById('map'), contract)
+    mapApi = createMap(document.getElementById('map'), contract)
     layersApi = createLayers(mapApi.map, contract, {
       onPlotClick: selectPlot,
       onHouseClick: (house) => selectHouse(house.id),
     })
+
+    // подложка берётся из каталога `data/plans.json`, а не из кода модуля
+    catalog = await loadPlansCatalog(contract)
+    await applyPlan(urlOptions.planId || catalog.defaultPlanId)
 
     renderPanels()
     setupSearch()
