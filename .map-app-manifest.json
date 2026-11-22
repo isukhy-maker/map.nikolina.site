@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "publishedAt": "2026-11-22T21:18:05.359Z",
+  "publishedAt": "2026-11-22T21:20:45.434Z",
   "files": {
     ".nojekyll": "811c9dc5-0",
     "app.css": "dc240205-31a8",
@@ -12,6 +12,8 @@
     "js/layers.js": "7e8d7deb-1f2d",
     "js/main.js": "918ede4f-2731",
     "js/map.js": "e79d8bbb-6d0",
-    "js/panels.js": "2472199e-10b5"
+    "js/panels.js": "2472199e-10b5",
+    "vendor/leaflet.js": "5d8449ed-24060",
+    "vendor/leaflet.css": "8de6299e-39d6"
   }
 }
