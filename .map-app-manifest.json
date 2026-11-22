@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "publishedAt": "2026-11-22T22:33:42.976Z",
+  "publishedAt": "2026-11-22T22:36:33.982Z",
   "files": {
     ".nojekyll": "811c9dc5-0",
     "app.css": "a0243098-378b",
@@ -15,7 +15,7 @@
     "js/main.js": "29e22d60-2e76",
     "js/map.js": "197067e-abc",
     "js/panels.js": "5c106029-197a",
-    "js/plans.js": "3d5236a5-18c6",
+    "js/plans.js": "6afdc32d-1970",
     "plans/scheme-vector.svg": "22e96d82-604",
     "vendor/leaflet.js": "5d8449ed-24060",
     "vendor/leaflet.css": "8de6299e-39d6"

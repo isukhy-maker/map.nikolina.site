@@ -164,8 +164,10 @@ function catalogFromContract(contract) {
 export async function loadPlansCatalog(contract) {
   try {
     // Каталог — обычный конфигурационный файл с данными (ES-модуль, чтобы он
-    // отдавался и статикой Chatium, и GitHub Pages).
-    const module = await import(PLANS_URL)
+    // отдавался и статикой Chatium, и GitHub Pages). Метка времени в адресе
+    // гарантирует, что редактор увидит свежий каталог сразу после публикации,
+    // а не закешированную копию GitHub Pages.
+    const module = await import(PLANS_URL + '?t=' + Date.now())
     const raw = (module && (module.plansCatalog || module.default)) || null
     if (!raw || !Array.isArray(raw.plans) || raw.plans.length === 0) {
       throw new Error('в каталоге нет подложек')
