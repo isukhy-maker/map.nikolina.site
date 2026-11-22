@@ -662,6 +662,22 @@ body {
   margin-bottom: 0.2rem;
 }
 
+/* ---------------- встраивание в страницу /map ---------------- */
+
+/* Внутри iframe на странице музея заголовок модуля дублирует h1 страницы:
+   оставляем только компактную панель действий. */
+.is-embedded .ng-topbar {
+  padding: 0.35rem 0.6rem;
+}
+
+.is-embedded .ng-topbar-title {
+  display: none;
+}
+
+.is-embedded .ng-topbar-actions {
+  margin-left: auto;
+}
+
 /* ---------------- мобильный режим ---------------- */
 
 @media (max-width: 860px) {

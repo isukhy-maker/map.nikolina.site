@@ -5,7 +5,7 @@
  * карту, панели и карточки. Данные приходят из `data.js` (postMessage / fetch / snapshot).
  */
 
-import { resolveData, postToParent } from './data.js'
+import { resolveData, postToParent, isEmbedded } from './data.js'
 import { createMap } from './map.js'
 import { createLayers } from './layers.js'
 import { renderHouseCard, renderPlotCard } from './card.js'
@@ -275,6 +275,9 @@ function setupSidebarToggle() {
 }
 
 async function boot() {
+  // внутри iframe на странице /map заголовок модуля не нужен — h1 уже есть на странице
+  if (isEmbedded()) document.documentElement.classList.add('is-embedded')
+
   const urlOptions = readUrlOptions()
 
   try {
