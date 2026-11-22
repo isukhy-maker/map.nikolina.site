@@ -674,6 +674,11 @@ body {
   display: none;
 }
 
+/* плашка «условная карта» уже есть на самой странице */
+.is-embedded .ng-badge {
+  display: none;
+}
+
 .is-embedded .ng-topbar-actions {
   margin-left: auto;
 }
