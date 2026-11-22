@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "publishedAt": "2026-11-22T22:26:12.561Z",
+  "publishedAt": "2026-11-22T22:31:09.267Z",
   "files": {
     ".nojekyll": "811c9dc5-0",
     "app.css": "a0243098-378b",
     "data/layers/plots.js": "4d14e1a6-113b",
-    "data/plans.js": "9955ce9a-1d2d",
+    "data/plans.js": "93d72737-1d06",
     "index.html": "7b7041e3-9c2",
     "js/card.js": "661d9c1c-2204",
     "js/config.js": "9a34fa0d-388",
