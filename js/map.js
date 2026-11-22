@@ -47,6 +47,14 @@ export function createMap(container, contract) {
     }).addTo(map)
   }
 
+  // Внутри страницы /map колесо должно прокручивать страницу, а не зумить карту:
+  // зум колесом включается кликом по карте и выключается, когда курсор ушёл.
+  if (document.documentElement.classList.contains('is-embedded')) {
+    map.scrollWheelZoom.disable()
+    map.on('click', () => map.scrollWheelZoom.enable())
+    map.on('mouseout', () => map.scrollWheelZoom.disable())
+  }
+
   // пересчёт размеров после изменения контейнера (мобильная панель, поворот экрана)
   if (typeof ResizeObserver !== 'undefined') {
     const observer = new ResizeObserver(() => map.invalidateSize())

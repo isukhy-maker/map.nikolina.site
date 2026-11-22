@@ -298,6 +298,14 @@ async function boot() {
     setupSearch()
     setupSidebarToggle()
 
+    // на телефоне внутри страницы панель по умолчанию свёрнута — иначе она
+    // съедает половину высоты iframe и карта почти не видна
+    if (isEmbedded() && window.matchMedia('(max-width: 860px)').matches) {
+      elements.sidebar.classList.add('is-hidden')
+      elements.toggleSidebar.setAttribute('aria-expanded', 'false')
+      window.setTimeout(() => window.dispatchEvent(new Event('resize')), 60)
+    }
+
     if (related && houseId) {
       const house = contract.houses.find((item) => item.id === houseId)
       for (const relatedId of (house && house.relatedHouseIds) || []) {
