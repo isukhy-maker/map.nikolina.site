@@ -1,0 +1,700 @@
+/*
+ * Карта Николиной Горы — оформление автономного модуля.
+ * Палитра и типографика повторяют брендовые токены сайта (`styles.tsx`).
+ */
+
+:root {
+  --ivory: #f5f0e6;
+  --ivory-2: #ece5d6;
+  --beige: #fdfbf5;
+  --graphite: #232b27;
+  --graphite-soft: #6e6a5e;
+  --line: #e0d8c8;
+
+  --ng-mountain: #a2a551;
+  --ng-pine: #115142;
+  --ng-architecture: #508b79;
+  --ng-history: #d9912a;
+  --ng-river: #7792a3;
+  --ng-trunks: #ba3912;
+
+  --font-display: 'Berlin', 'Avenir Next', 'Futura', 'Century Gothic', 'Trebuchet MS', system-ui, sans-serif;
+  --font-body: 'Caviar Dreams', 'Segoe UI', 'Trebuchet MS', 'Verdana', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--ivory);
+  color: var(--graphite);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+.ng-app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* ---------------- верхняя панель ---------------- */
+
+.ng-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 1rem;
+  background: var(--beige);
+  border-bottom: 1px solid var(--line);
+  flex: 0 0 auto;
+}
+
+.ng-eyebrow {
+  display: block;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ng-history);
+}
+
+.ng-topbar h1 {
+  margin: 0.1rem 0 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.ng-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ng-badge {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--graphite-soft);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  background: var(--ivory);
+}
+
+.ng-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--ng-pine);
+  color: var(--ng-pine);
+  background: transparent;
+  padding: 0.4rem 0.85rem;
+  border-radius: 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.ng-btn:hover {
+  background: var(--ng-pine);
+  color: #fff;
+}
+
+.ng-btn-primary {
+  background: var(--ng-pine);
+  color: #fff;
+}
+
+.ng-btn-primary:hover {
+  background: var(--ng-architecture);
+  border-color: var(--ng-architecture);
+}
+
+/* ---------------- каркас ---------------- */
+
+.ng-body {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.ng-sidebar {
+  width: 300px;
+  flex: 0 0 300px;
+  overflow-y: auto;
+  padding: 0.9rem;
+  background: var(--ivory);
+  border-right: 1px solid var(--line);
+}
+
+.ng-sidebar.is-hidden {
+  display: none;
+}
+
+.ng-panel {
+  background: var(--beige);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  padding: 0.75rem 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.ng-panel h2 {
+  margin: 0 0 0.55rem;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--graphite-soft);
+}
+
+.ng-panel input[type='search'],
+.ng-panel select {
+  width: 100%;
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: var(--graphite);
+  background: var(--ivory);
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  padding: 0.45rem 0.6rem;
+  outline: none;
+}
+
+.ng-panel input[type='search']:focus,
+.ng-panel select:focus {
+  border-color: var(--ng-pine);
+}
+
+.ng-hint {
+  margin: 0.5rem 0 0;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: var(--graphite-soft);
+}
+
+.ng-note {
+  margin: 0.25rem 0 1rem;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: var(--graphite-soft);
+}
+
+/* ---------------- слои ---------------- */
+
+.ng-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.ng-check {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.22rem 0;
+  font-size: 0.83rem;
+  cursor: pointer;
+}
+
+.ng-check input {
+  accent-color: var(--ng-pine);
+  margin: 0;
+}
+
+.ng-check.is-stub {
+  color: var(--graphite-soft);
+  cursor: default;
+}
+
+/* ---------------- периоды и чипы ---------------- */
+
+.ng-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.ng-chip {
+  border: 1px solid var(--line);
+  background: var(--ivory);
+  color: var(--graphite-soft);
+  border-radius: 999px;
+  padding: 0.22rem 0.62rem;
+  font-family: inherit;
+  font-size: 0.74rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ng-chip:hover {
+  border-color: var(--ng-pine);
+  color: var(--ng-pine);
+}
+
+.ng-chip.is-active {
+  background: var(--ng-pine);
+  border-color: var(--ng-pine);
+  color: #fff;
+}
+
+/* ---------------- легенда ---------------- */
+
+.ng-legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.74rem;
+  color: var(--graphite-soft);
+}
+
+.ng-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.ng-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  flex: 0 0 12px;
+  display: inline-block;
+}
+
+.ng-swatch.is-line {
+  border-radius: 2px;
+  height: 0;
+  border-top: 2px dashed var(--ng-trunks);
+}
+
+/* ---------------- результаты поиска ---------------- */
+
+.ng-results {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.ng-result {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  width: 100%;
+  text-align: left;
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: 0.45rem;
+  padding: 0.3rem 0.4rem;
+  font-family: inherit;
+  font-size: 0.8rem;
+  color: var(--graphite);
+  cursor: pointer;
+}
+
+.ng-result:hover {
+  background: var(--ivory);
+  border-color: var(--line);
+}
+
+.ng-result strong {
+  font-family: var(--font-display);
+  white-space: nowrap;
+}
+
+.ng-result span {
+  color: var(--graphite-soft);
+  font-size: 0.74rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ng-result em {
+  margin-left: auto;
+  font-style: normal;
+  font-size: 0.68rem;
+  color: var(--ng-history);
+  white-space: nowrap;
+}
+
+/* ---------------- карта ---------------- */
+
+.ng-map-wrap {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  background: #141414;
+}
+
+.ng-map {
+  position: absolute;
+  inset: 0;
+}
+
+/* фон вокруг подложки — тёплый, чтобы поля листа не выглядели «серой рамкой» */
+.leaflet-container {
+  background: #f2f0ec;
+  font-family: var(--font-body);
+}
+
+.ng-status {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--graphite-soft);
+  background: var(--ivory);
+  z-index: 500;
+}
+
+.ng-status.is-error {
+  color: var(--ng-trunks);
+}
+
+.ng-status[hidden] {
+  display: none;
+}
+
+.ng-plan-image {
+  image-rendering: auto;
+}
+
+/* подписи участков */
+.ng-plot-label {
+  background: transparent;
+  border: 0;
+  color: rgba(35, 43, 39, 0.62);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  text-shadow: 0 0 3px rgba(253, 251, 245, 0.9);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* подписи связей участков */
+.ng-link-label {
+  background: rgba(253, 251, 245, 0.9);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0 0.35rem;
+  font-size: 10px;
+  color: var(--ng-trunks);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* маркеры дач */
+.ng-marker {
+  background: transparent;
+  border: 0;
+}
+
+.ng-marker-dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: #3f5144;
+  border: 2.5px solid #fff;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  transition: background 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.ng-marker-dot.is-unknown {
+  background: #8fa08f;
+  border-style: dashed;
+}
+
+.ng-marker-dot.is-event {
+  background: #7a6a2f;
+}
+
+.ng-marker-dot.is-family {
+  background: var(--ng-pine);
+  box-shadow: 0 0 0 3px var(--ng-history);
+}
+
+.ng-marker-dot.is-related {
+  box-shadow: 0 0 0 3px var(--ng-history);
+}
+
+.ng-marker-dot.is-selected {
+  background: var(--ng-pine);
+  box-shadow: 0 0 0 4px rgba(217, 145, 42, 0.85);
+}
+
+.ng-marker-dot.is-dim {
+  opacity: 0.35;
+}
+
+/* бейдж событий */
+.ng-event-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--ng-history);
+  border: 1.5px solid #fff;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* подсказки Leaflet */
+.ng-tooltip {
+  background: #2e2a26;
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 1.35;
+  padding: 0.35rem 0.55rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+.ng-tooltip::before {
+  border-top-color: #2e2a26 !important;
+}
+
+.ng-tooltip strong {
+  font-family: var(--font-display);
+}
+
+/* ---------------- карточка ---------------- */
+
+.ng-card {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 320px;
+  max-height: calc(100% - 1.5rem);
+  display: flex;
+  flex-direction: column;
+  background: var(--beige);
+  border: 1px solid var(--line);
+  border-radius: 0.9rem;
+  box-shadow: 0 12px 34px rgba(20, 26, 22, 0.28);
+  overflow: hidden;
+  z-index: 600;
+}
+
+.ng-card[hidden] {
+  display: none;
+}
+
+.ng-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem 0.6rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.ng-card-head .ng-eyebrow {
+  font-size: 0.62rem;
+}
+
+.ng-card-head h3 {
+  margin: 0.1rem 0 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.ng-card-close {
+  border: 0;
+  background: transparent;
+  color: var(--graphite-soft);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.1rem 0.25rem;
+}
+
+.ng-card-close:hover {
+  color: var(--graphite);
+}
+
+.ng-card-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0.75rem 1rem;
+  overflow-y: auto;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.ng-card-photo {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  border: 1px solid var(--line);
+  margin-bottom: 0.6rem;
+  background: var(--ivory-2);
+}
+
+.ng-card-title {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.ng-card-row {
+  display: flex;
+  gap: 0.4rem;
+  color: var(--graphite-soft);
+  font-size: 0.78rem;
+  margin-bottom: 0.3rem;
+}
+
+.ng-card-row b {
+  color: var(--graphite);
+  font-weight: 600;
+}
+
+.ng-card-section {
+  margin-top: 0.7rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--line);
+}
+
+.ng-card-section h4 {
+  margin: 0 0 0.4rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--graphite-soft);
+  font-weight: 700;
+}
+
+.ng-link-item {
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  margin-bottom: 0.35rem;
+  background: var(--ivory);
+}
+
+.ng-link-item a {
+  color: var(--ng-pine);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.ng-link-item a:hover {
+  text-decoration: underline;
+}
+
+.ng-link-meta {
+  font-size: 0.72rem;
+  color: var(--graphite-soft);
+}
+
+.ng-link-meta .is-direct {
+  color: var(--ng-pine);
+}
+
+.ng-link-meta .is-computed {
+  color: var(--ng-history);
+}
+
+.ng-card-foot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.7rem 1rem 0.9rem;
+  border-top: 1px solid var(--line);
+}
+
+.ng-card-foot .ng-btn {
+  justify-content: center;
+}
+
+.ng-empty {
+  color: var(--graphite-soft);
+  font-size: 0.78rem;
+}
+
+.ng-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.78rem;
+}
+
+.ng-list li {
+  margin-bottom: 0.2rem;
+}
+
+/* ---------------- мобильный режим ---------------- */
+
+@media (max-width: 860px) {
+  .ng-body {
+    flex-direction: column;
+  }
+
+  .ng-sidebar {
+    width: auto;
+    flex: 0 0 auto;
+    max-height: 46vh;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .ng-sidebar.is-hidden {
+    display: none;
+  }
+
+  .ng-map-wrap {
+    min-height: 54vh;
+  }
+
+  .ng-card {
+    top: auto;
+    right: 0.5rem;
+    left: 0.5rem;
+    bottom: 0.5rem;
+    width: auto;
+    max-height: 62%;
+  }
+
+  .ng-badge {
+    display: none;
+  }
+}

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Карта Николиной Горы</title>
+    <link rel="stylesheet" href="./vendor/leaflet.css" />
+    <link rel="stylesheet" href="./app.css" />
+  </head>
+  <body>
+    <div class="ng-app">
+      <header class="ng-topbar">
+        <div class="ng-topbar-title">
+          <span class="ng-eyebrow">Николина Гора · 1925—2025</span>
+          <h1>Карта поселка</h1>
+        </div>
+        <div class="ng-topbar-actions">
+          <span class="ng-badge">условная карта</span>
+          <button type="button" class="ng-btn" id="toggle-sidebar" aria-expanded="true">Панель</button>
+        </div>
+      </header>
+
+      <div class="ng-body">
+        <aside class="ng-sidebar" id="sidebar">
+          <section class="ng-panel">
+            <h2>Поиск</h2>
+            <input id="search" type="search" placeholder="Номер или название дачи" autocomplete="off" />
+            <div id="search-results" class="ng-results" hidden></div>
+          </section>
+
+          <section class="ng-panel">
+            <h2>Слои</h2>
+            <div id="layers" class="ng-checks"></div>
+            <p class="ng-hint" id="layers-hint" hidden></p>
+          </section>
+
+          <section class="ng-panel">
+            <h2>Период</h2>
+            <div id="periods" class="ng-chips"></div>
+          </section>
+
+          <section class="ng-panel">
+            <h2>Семья</h2>
+            <select id="family"></select>
+            <p class="ng-hint" id="family-hint" hidden></p>
+          </section>
+
+          <section class="ng-panel">
+            <h2>Легенда</h2>
+            <ul class="ng-legend" id="legend"></ul>
+          </section>
+
+          <p class="ng-note">
+            Условная схема поселка — не географическая карта. Точные координаты и геоподложка будут уточняться.
+          </p>
+        </aside>
+
+        <main class="ng-map-wrap">
+          <div id="map" class="ng-map"></div>
+          <div id="status" class="ng-status">Загрузка карты…</div>
+          <article id="card" class="ng-card" hidden></article>
+        </main>
+      </div>
+    </div>
+
+    <script src="./vendor/leaflet.js"></script>
+    <script type="module" src="./js/main.js"></script>
+  </body>
+</html>
